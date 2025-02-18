@@ -1,4 +1,4 @@
-FROM golang:1.19-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 RUN apk add git make curl
 
@@ -11,11 +11,11 @@ RUN sed -i 's/go 1.11/go 1.17/g' go.mod && \
     go get -u github.com/prometheus/exporter-toolkit@v0.8.2  && \
     go get -u golang.org/x/crypto@v0.0.0-20220314234659-1baeb1ce4c0b && \
     go get -u golang.org/x/sys@v0.4.0 && \
-    go get -u golang.org/x/net@v0.4.0 && \
+    go get -u golang.org/x/net@v0.33.0 && \
     go mod tidy && go mod vendor && \
     make common-build
 
-FROM alpine:3.17
+FROM alpine:3.21
 
 COPY --from=builder /go/pushgateway/pushgateway /bin/pushgateway
 
